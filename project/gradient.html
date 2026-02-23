@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Gradient Color Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 340px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+            z-index: 100;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .sidebar-content {
+            padding: 24px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .close-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: #6b7280;
+        }
+
+        .close-btn:hover {
+            color: #1f2937;
+        }
+
+        /* Search Box */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #3b82f6;
+        }
+
+        /* Theme Tabs */
+        .theme-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            background: #f3f4f6;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .theme-tab {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            color: #6b7280;
+            transition: all 0.3s ease;
+        }
+
+        .theme-tab:hover {
+            color: #374151;
+        }
+
+        .theme-tab.active {
+            background: white;
+            color: #3b82f6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #f3f4f6;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6b7280;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: #374151;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #3b82f6;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .gradient-section {
+            margin-bottom: 32px;
+        }
+
+        .gradient-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .count-badge {
+            background: #e5e7eb;
+            color: #6b7280;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Gradient Grid */
+        .gradient-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .gradient-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .gradient-wrapper.used .gradient-box {
+            opacity: 0.6;
+            border: 2px solid #10b981;
+        }
+
+        .gradient-wrapper.hidden {
+            display: none;
+        }
+
+        .gradient-box {
+            width: 100%;
+            height: 70px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gradient-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .gradient-box.active {
+            transform: scale(1.08);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.6);
+        }
+
+        .gradient-name {
+            font-size: 11px;
+            font-weight: 500;
+            color: #374151;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .gradient-checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #10b981;
+            align-self: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+            transition: background 0.5s ease;
+        }
+
+        .menu-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            background: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .main-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .gradient-info {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .gradient-info h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .gradient-info p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Code Cards */
+        .code-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .code-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .code-display {
+            background: #1f2937;
+            color: #10b981;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #2563eb;
+        }
+
+        /* Preview Cards */
+        .preview-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .preview-card-vertical {
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .preview-card-vertical:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .card-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-input:focus {
+            border-color: #3b82f6;
+        }
+
+        .card-btn {
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .card-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .card-result {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card-result h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .card-result p {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .copy-card-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1f2937;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .copy-card-btn:hover {
+            background: white;
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                transform: translateX(-100%);
+                height: 100vh;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .close-btn {
+                display: block;
+            }
+
+            .menu-btn {
+                display: flex;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .main-title {
+                font-size: 28px;
+                margin-top: 48px;
+            }
+
+            .code-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .gradient-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Scrollbar */
+        .sidebar-content::-webkit-scrollbar,
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .sidebar-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <div class="sidebar-header">
+                    <h2>Gradient Picker</h2>
+                    <button class="close-btn" id="closeSidebar">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Search Box -->
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search gradients...">
+                </div>
+
+                <!-- Tab Navigation -->
+                <div class="tab-nav">
+                    <button class="tab-btn active" data-tab="separate">Terpisah</button>
+                    <button class="tab-btn" data-tab="combined">Kombinasi</button>
+                </div>
+
+                <!-- Separate Tab -->
+                <div class="tab-content active" id="separateTab">
+                    <!-- Theme Tabs -->
+                    <div class="theme-tabs">
+                        <button class="theme-tab active" data-theme="all">All</button>
+                        <button class="theme-tab" data-theme="light">Light</button>
+                        <button class="theme-tab" data-theme="medium">Medium</button>
+                        <button class="theme-tab" data-theme="dark">Dark</button>
+                    </div>
+
+                    <!-- Background Gradients -->
+                    <div class="gradient-section">
+                        <h3>Background <span class="count-badge" id="bgCount">0</span></h3>
+                        <div class="gradient-grid" id="bgGradientList"></div>
+                    </div>
+
+                    <!-- Card Gradients -->
+                    <div class="gradient-section">
+                        <h3>Card <span class="count-badge" id="cardCount">0</span></h3>
+                        <div class="gradient-grid" id="cardGradientList"></div>
+                    </div>
+                </div>
+
+                <!-- Combined Tab -->
+                <div class="tab-content" id="combinedTab">
+                    <div class="gradient-section">
+                        <h3>Kombinasi Background & Card</h3>
+                        <div class="gradient-grid" id="combinedList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <button class="menu-btn" id="openSidebar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="content-wrapper">
+                <h1 class="main-title">Gradient Color Studio</h1>
+                
+                <!-- Gradient Info -->
+                <div class="gradient-info">
+                    <h2 id="currentBgName">-</h2>
+                    <p id="currentCardName">-</p>
+                </div>
+
+                <!-- Code Cards -->
+                <div class="code-cards">
+                    <div class="code-card">
+                        <h3>Background Code</h3>
+                        <div class="code-display" id="bgCode"></div>
+                        <button class="copy-btn" id="copyBgBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span id="copyBgText">Copy Code</span>
+                        </button>
+                    </div>
+
+                    <div class="code-card">
+                        <h3>Card Code</h3>
+                        <div class="code-display" id="cardCode"></div>
+                        <button class="copy-btn" id="copyCardBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span id="copyCardText">Copy Code</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Preview Cards -->
+                <div class="preview-cards" id="previewCards"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced Gradient Data with themes
+        const backgroundGradients = [
+            // Light Theme
+            { name: 'Soft Peach', gradient: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)', theme: 'light' },
+            { name: 'Pastel Pink', gradient: 'linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%)', theme: 'light' },
+            { name: 'Sky Blue', gradient: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)', theme: 'light' },
+            { name: 'Mint Fresh', gradient: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)', theme: 'light' },
+            { name: 'Lemon Cream', gradient: 'linear-gradient(135deg, #fffde7 0%, #fff9c4 100%)', theme: 'light' },
+            { name: 'Lavender Mist', gradient: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)', theme: 'light' },
+            { name: 'Cotton Candy', gradient: 'linear-gradient(135deg, #fce4ec 0%, #e1bee7 100%)', theme: 'light' },
+            { name: 'Aqua Breeze', gradient: 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)', theme: 'light' },
+            { name: 'Cloud Milk', gradient: 'linear-gradient(120deg, rgb(255,255,255) 0%, rgb(235,240,245) 100%)', theme: 'light' },
+            { name: 'Ice Mint', gradient: 'linear-gradient(145deg, rgb(220,245,240) 10%, rgb(180,230,220) 90%)', theme: 'light' },
+            { name: 'Soft Sky', gradient: 'linear-gradient(160deg, rgb(230,245,255) 0%, rgb(200,225,245) 100%)', theme: 'light' },
+            { name: 'Vanilla Cream', gradient: 'linear-gradient(130deg, rgb(255,250,230) 0%, rgb(255,235,200) 100%)', theme: 'light' },
+            { name: 'Rose Milk', gradient: 'linear-gradient(150deg, rgb(255,235,240) 5%, rgb(245,200,210) 95%)', theme: 'light' },
+            
+            
+            // Medium Theme
+            { name: 'Sunset Bliss', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', theme: 'medium' },
+            { name: 'Ocean Wave', gradient: 'linear-gradient(135deg, #00d2ff 0%, #3a47d5 100%)', theme: 'medium' },
+            { name: 'Rose Garden', gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', theme: 'medium' },
+            { name: 'Tropical Paradise', gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', theme: 'medium' },
+            { name: 'Golden Hour', gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', theme: 'medium' },
+            { name: 'Purple Dream', gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', theme: 'medium' },
+            { name: 'Coral Sunset', gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', theme: 'medium' },
+            { name: 'Emerald Sea', gradient: 'linear-gradient(135deg, #2af598 0%, #009efd 100%)', theme: 'medium' },
+            { name: 'Peachy Keen', gradient: 'linear-gradient(135deg, #ff9a56 0%, #ffecd2 100%)', theme: 'medium' },
+            { name: 'Berry Blast', gradient: 'linear-gradient(135deg, #ff6b9d 0%, #c06c84 100%)', theme: 'medium' },
+            { name: 'Neon Lagoon', gradient: 'linear-gradient(135deg, rgb(80,200,220) 0%, rgb(60,120,200) 100%)', theme: 'medium' },
+            { name: 'Sunflare', gradient: 'linear-gradient(110deg, rgb(255,160,80) 0%, rgb(255,220,120) 100%)', theme: 'medium' },
+            { name: 'Plum Fade', gradient: 'linear-gradient(140deg, rgb(160,120,200) 0%, rgb(220,180,240) 100%)', theme: 'medium' },
+            { name: 'Ocean Glass', gradient: 'linear-gradient(125deg, rgb(100,180,200) 0%, rgb(160,220,230) 100%)', theme: 'medium' },
+            { name: 'Coral Heat', gradient: 'linear-gradient(155deg, rgb(255,120,120) 0%, rgb(255,190,160) 100%)', theme: 'medium' },
+            { name: 'Peach Cloud', gradient: 'linear-gradient(90deg, #ffa585 0%, #ffeda0 100%)',theme: 'medium'},
+            { name: 'Peach Glow', gradient: 'linear-gradient(120deg, rgb(255,170,140) 0%, rgb(255,205,160) 50%, rgb(255,235,190) 100%)', theme: 'medium' },
+            { name: 'Apricot Sky', gradient: 'linear-gradient(130deg, rgb(255,190,140) 0%, rgb(255,220,170) 50%, rgb(240,235,200) 100%)', theme: 'medium' },
+            { name: 'Sunlit Blush', gradient: 'linear-gradient(135deg, rgb(255,160,180) 0%, rgb(255,200,200) 50%, rgb(255,235,220) 100%)', theme: 'medium' },
+            { name: 'Honey Drift', gradient: 'linear-gradient(125deg, rgb(255,185,110) 0%, rgb(255,215,150) 50%, rgb(255,240,200) 100%)', theme: 'medium' },
+            { name: 'Soft Dawn', gradient: 'linear-gradient(140deg, rgb(255,200,170) 0%, rgb(255,225,200) 50%, rgb(245,240,225) 100%)', theme: 'medium' },
+            { name: 'Rose Quartz', gradient: 'linear-gradient(130deg, rgb(255,170,190) 0%, rgb(255,200,210) 50%, rgb(245,230,235) 100%)', theme: 'medium' },
+            { name: 'Lavender Mist', gradient: 'linear-gradient(140deg, rgb(210,180,255) 0%, rgb(225,205,255) 50%, rgb(240,235,255) 100%)', theme: 'medium' },
+            { name: 'Sky Petal', gradient: 'linear-gradient(135deg, rgb(170,210,255) 0%, rgb(200,225,255) 50%, rgb(230,240,255) 100%)', theme: 'medium' },
+            { name: 'Mint Bloom', gradient: 'linear-gradient(125deg, rgb(170,240,215) 0%, rgb(200,250,230) 50%, rgb(230,255,245) 100%)', theme: 'medium' },
+            { name: 'Berry Cream', gradient: 'linear-gradient(145deg, rgb(220,160,200) 0%, rgb(240,190,220) 50%, rgb(250,225,240) 100%)', theme: 'medium' },
+
+            
+            
+            // Dark Theme
+            { name: 'Midnight Navy', gradient: 'linear-gradient(135deg, #000428 0%, #004e92 100%)', theme: 'dark' },
+            { name: 'Deep Space', gradient: 'linear-gradient(135deg, #000000 0%, #434343 100%)', theme: 'dark' },
+            { name: 'Ruby Fire', gradient: 'linear-gradient(135deg, #eb3349 0%, #f45c43 100%)', theme: 'dark' },
+            { name: 'Royal Purple', gradient: 'linear-gradient(135deg, #360033 0%, #0b8793 100%)', theme: 'dark' },
+            { name: 'Forest Night', gradient: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)', theme: 'dark' },
+            { name: 'Volcanic Orange', gradient: 'linear-gradient(135deg, #ff512f 0%, #dd2476 100%)', theme: 'dark' },
+            { name: 'Deep Ocean', gradient: 'linear-gradient(135deg, #2e3192 0%, #1bffff 100%)', theme: 'dark' },
+            { name: 'Nebula Night', gradient: 'linear-gradient(135deg, #5614b0 0%, #dbd65c 100%)', theme: 'dark' },
+            { name: 'Crimson Shadow', gradient: 'linear-gradient(135deg, #870000 0%, #190a05 100%)', theme: 'dark' },
+            { name: 'Electric Blue', gradient: 'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)', theme: 'dark' },
+            { name: 'Midnight Steel', gradient: 'linear-gradient(135deg, rgb(20,30,40) 0%, rgb(60,80,100) 100%)', theme: 'dark' },
+            { name: 'Carbon Blue', gradient: 'linear-gradient(145deg, rgb(10,25,50) 0%, rgb(40,70,120) 100%)', theme: 'dark' },
+            { name: 'Obsidian Glow', gradient: 'linear-gradient(160deg, rgb(30,30,30) 0%, rgb(90,90,90) 100%)', theme: 'dark' },
+            { name: 'Royal Night', gradient: 'linear-gradient(130deg, rgb(50,30,90) 0%, rgb(120,80,160) 100%)', theme: 'dark' },
+            { name: 'Emerald Shadow', gradient: 'linear-gradient(150deg, rgb(10,60,50) 0%, rgb(40,120,100) 100%)', theme: 'dark' },
+            { name: 'Royal Mirage',gradient: 'linear-gradient(90deg, #832388 0%, #e3436b 50%, #f0772f 100%)',theme: 'dark'},
+            { name: 'Starburst Night',gradient: 'linear-gradient(90deg, #fffbf1 0%, #ec458d 50%, #474ed7 100%)',theme: 'dark'},
+            { name: 'Aurora Pulse', gradient: 'linear-gradient(135deg, rgb(20,30,70) 0%, rgb(80,50,160) 45%, rgb(180,90,220) 100%)', theme: 'dark' },
+            { name: 'Solar Ember', gradient: 'linear-gradient(140deg, rgb(120,20,10) 0%, rgb(220,80,30) 50%, rgb(255,190,80) 100%)', theme: 'dark' },
+            { name: 'Ocean Prism', gradient: 'linear-gradient(150deg, rgb(10,40,80) 0%, rgb(20,120,160) 50%, rgb(120,230,220) 100%)', theme: 'dark' },
+            { name: 'Velvet Dusk', gradient: 'linear-gradient(130deg, rgb(40,10,60) 0%, rgb(120,40,140) 45%, rgb(255,120,180) 100%)', theme: 'dark' },
+            { name: 'Neon Horizon', gradient: 'linear-gradient(160deg, rgb(10,10,30) 0%, rgb(0,180,255) 45%, rgb(180,255,120) 100%)', theme: 'dark' },
+            { name: 'Midnight Forge', gradient: 'linear-gradient(145deg, rgb(15,20,40) 0%, rgb(60,40,120) 45%, rgb(140,80,200) 100%)', theme: 'dark' },
+            { name: 'Crimson Void', gradient: 'linear-gradient(135deg, rgb(60,10,20) 0%, rgb(140,30,60) 50%, rgb(220,90,120) 100%)', theme: 'dark' },
+            { name: 'Obsidian Tide', gradient: 'linear-gradient(150deg, rgb(5,25,35) 0%, rgb(20,80,110) 45%, rgb(90,160,180) 100%)', theme: 'dark' },
+            { name: 'Purple Abyss', gradient: 'linear-gradient(140deg, rgb(25,10,50) 0%, rgb(90,40,140) 50%, rgb(170,110,220) 100%)', theme: 'dark' },
+            { name: 'Iron Eclipse', gradient: 'linear-gradient(155deg, rgb(20,20,20) 0%, rgb(70,70,90) 45%, rgb(160,160,200) 100%)', theme: 'dark' }
+
+        ];
+
+        const cardGradients = [
+            // Light Theme
+            { name: 'Pure White', gradient: 'linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%)', theme: 'light' },
+            { name: 'Cool Mint', gradient: 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)', theme: 'light' },
+            { name: 'Rose Quartz', gradient: 'linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%)', theme: 'light' },
+            { name: 'Peach Sorbet', gradient: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)', theme: 'light' },
+            { name: 'Soft Lavender', gradient: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)', theme: 'light' },
+            { name: 'Lime Fresh', gradient: 'linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%)', theme: 'light' },
+            { name: 'Cream White', gradient: 'linear-gradient(135deg, #fffde7 0%, #fff9c4 100%)', theme: 'light' },
+            { name: 'Baby Blue', gradient: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)', theme: 'light' },
+            
+            // Medium Theme
+            { name: 'Amber Glow', gradient: 'linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%)', theme: 'medium' },
+            { name: 'Coral Reef', gradient: 'linear-gradient(135deg, #fbe9e7 0%, #ffccbc 100%)', theme: 'medium' },
+            { name: 'Soft Pink', gradient: 'linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%)', theme: 'medium' },
+            { name: 'Mint Green', gradient: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)', theme: 'medium' },
+            { name: 'Periwinkle', gradient: 'linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%)', theme: 'medium' },
+            { name: 'Apricot', gradient: 'linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%)', theme: 'medium' },
+            { name: 'Aqua Foam', gradient: 'linear-gradient(135deg, #b2ebf2 0%, #80deea 100%)', theme: 'medium' },
+            { name: 'Lilac', gradient: 'linear-gradient(135deg, #e1bee7 0%, #ce93d8 100%)', theme: 'medium' },
+            
+            // Dark Theme
+            { name: 'Slate Gray', gradient: 'linear-gradient(135deg, #37474f 0%, #263238 100%)', theme: 'dark' },
+            { name: 'Deep Purple', gradient: 'linear-gradient(135deg, #4a148c 0%, #6a1b9a 100%)', theme: 'dark' },
+            { name: 'Navy Blue', gradient: 'linear-gradient(135deg, #1a237e 0%, #283593 100%)', theme: 'dark' },
+            { name: 'Forest Green', gradient: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)', theme: 'dark' },
+            { name: 'Maroon', gradient: 'linear-gradient(135deg, #880e4f 0%, #ad1457 100%)', theme: 'dark' },
+            { name: 'Teal Deep', gradient: 'linear-gradient(135deg, #004d40 0%, #00695c 100%)', theme: 'dark' },
+            { name: 'Charcoal', gradient: 'linear-gradient(135deg, #212121 0%, #424242 100%)', theme: 'dark' },
+            { name: 'Indigo Night', gradient: 'linear-gradient(135deg, #1a237e 0%, #311b92 100%)', theme: 'dark' },
+            
+        ];
+
+        // State
+        let selectedBg = 0;
+        let selectedCard = 0;
+        let currentTheme = 'all';
+        let searchQuery = '';
+        let usedBgGradients = {};
+        let usedCardGradients = {};
+
+        // Elements
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const bgGradientList = document.getElementById('bgGradientList');
+        const cardGradientList = document.getElementById('cardGradientList');
+        const searchInput = document.getElementById('searchInput');
+        const themeTabs = document.querySelectorAll('.theme-tab');
+
+        // Initialize
+        function init() {
+            renderGradients();
+            updateDisplay();
+            setupEventListeners();
+            generatePreviewCards();
+        }
+
+        // Filter gradients
+        function filterGradients() {
+            const bgWrappers = bgGradientList.querySelectorAll('.gradient-wrapper');
+            const cardWrappers = cardGradientList.querySelectorAll('.gradient-wrapper');
+            
+            let bgVisible = 0;
+            let cardVisible = 0;
+
+            bgWrappers.forEach((wrapper, index) => {
+                const gradient = backgroundGradients[index];
+                const matchesTheme = currentTheme === 'all' || gradient.theme === currentTheme;
+                const matchesSearch = gradient.name.toLowerCase().includes(searchQuery.toLowerCase());
+                
+                if (matchesTheme && matchesSearch) {
+                    wrapper.classList.remove('hidden');
+                    bgVisible++;
+                } else {
+                    wrapper.classList.add('hidden');
+                }
+            });
+
+            cardWrappers.forEach((wrapper, index) => {
+                const gradient = cardGradients[index];
+                const matchesTheme = currentTheme === 'all' || gradient.theme === currentTheme;
+                const matchesSearch = gradient.name.toLowerCase().includes(searchQuery.toLowerCase());
+                
+                if (matchesTheme && matchesSearch) {
+                    wrapper.classList.remove('hidden');
+                    cardVisible++;
+                } else {
+                    wrapper.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('bgCount').textContent = bgVisible;
+            document.getElementById('cardCount').textContent = cardVisible;
+        }
+
+        // Render gradients
+        function renderGradients() {
+            backgroundGradients.forEach((bg, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'gradient-wrapper';
+                
+                const btn = document.createElement('button');
+                btn.className = 'gradient-box';
+                btn.style.background = bg.gradient;
+                btn.title = bg.name;
+                btn.onclick = () => selectBgGradient(index);
+                if (index === selectedBg) btn.classList.add('active');
+                
+                const name = document.createElement('div');
+                name.className = 'gradient-name';
+                name.textContent = bg.name;
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'gradient-checkbox';
+                checkbox.checked = usedBgGradients[index] || false;
+                checkbox.onclick = (e) => {
+                    e.stopPropagation();
+                    usedBgGradients[index] = checkbox.checked;
+                    wrapper.classList.toggle('used', checkbox.checked);
+                };
+                
+                wrapper.appendChild(btn);
+                wrapper.appendChild(name);
+                wrapper.appendChild(checkbox);
+                if (usedBgGradients[index]) wrapper.classList.add('used');
+                bgGradientList.appendChild(wrapper);
+            });
+
+            cardGradients.forEach((card, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'gradient-wrapper';
+                
+                const btn = document.createElement('button');
+                btn.className = 'gradient-box';
+                btn.style.background = card.gradient;
+                btn.title = card.name;
+                btn.onclick = () => selectCardGradient(index);
+                if (index === selectedCard) btn.classList.add('active');
+                
+                const name = document.createElement('div');
+                name.className = 'gradient-name';
+                name.textContent = card.name;
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'gradient-checkbox';
+                checkbox.checked = usedCardGradients[index] || false;
+                checkbox.onclick = (e) => {
+                    e.stopPropagation();
+                    usedCardGradients[index] = checkbox.checked;
+                    wrapper.classList.toggle('used', checkbox.checked);
+                };
+                
+                wrapper.appendChild(btn);
+                wrapper.appendChild(name);
+                wrapper.appendChild(checkbox);
+                if (usedCardGradients[index]) wrapper.classList.add('used');
+                cardGradientList.appendChild(wrapper);
+            });
+
+            filterGradients();
+        }
+
+        // Select background
+        function selectBgGradient(index) {
+            selectedBg = index;
+            const btns = bgGradientList.querySelectorAll('.gradient-box');
+            btns.forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+            updateDisplay();
+        }
+
+        // Select card
+        function selectCardGradient(index) {
+            selectedCard = index;
+            const btns = cardGradientList.querySelectorAll('.gradient-box');
+            btns.forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+            updateDisplay();
+        }
+
+        // Update display
+        function updateDisplay() {
+            mainContent.style.background = backgroundGradients[selectedBg].gradient;
+            document.getElementById('bgCode').textContent = `background: ${backgroundGradients[selectedBg].gradient};`;
+            document.getElementById('cardCode').textContent = `background: ${cardGradients[selectedCard].gradient};`;
+            document.getElementById('currentBgName').textContent = `Background: ${backgroundGradients[selectedBg].name}`;
+            document.getElementById('currentCardName').textContent = `Card: ${cardGradients[selectedCard].name}`;
+            
+            const previewCards = document.querySelectorAll('.preview-card-vertical');
+            previewCards.forEach(card => {
+                card.style.background = cardGradients[selectedCard].gradient;
+            });
+        }
+
+        // Generate preview cards
+        function generatePreviewCards() {
+            const previewContainer = document.getElementById('previewCards');
+            const cards = [
+                { title: 'Form Title', placeholder: 'Enter your text...', button: 'Submit', result: 'Your result will appear here' },
+                { title: 'Registration Form', placeholder: 'Username', button: 'Register', result: 'Registration pending' },
+                { title: 'Contact Form', placeholder: 'Your message...', button: 'Send', result: 'Message will be sent' }
+            ];
+
+            cards.forEach((data, index) => {
+                const card = document.createElement('div');
+                card.className = 'preview-card-vertical';
+                card.innerHTML = `
+                    <h3 class="card-title">${data.title}</h3>
+                    <input type="text" class="card-input" placeholder="${data.placeholder}">
+                    <button class="card-btn">${data.button}</button>
+                    <div class="card-result">
+                        <h4>Result:</h4>
+                        <p>${data.result}</p>
+                    </div>
+                    <button class="copy-card-btn" data-index="${index}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Copy HTML + CSS
+                    </button>
+                `;
+                previewContainer.appendChild(card);
+            });
+        }
+
+        // Copy functions
+        function copyToClipboard(text, type) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = type === 'bg' ? document.getElementById('copyBgText') : document.getElementById('copyCardText');
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = 'Copy Code';
+                }, 2000);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('openSidebar').onclick = () => {
+                sidebar.classList.add('open');
+                document.getElementById('openSidebar').style.display = 'none';
+            };
+
+            document.getElementById('closeSidebar').onclick = () => {
+                sidebar.classList.remove('open');
+                document.getElementById('openSidebar').style.display = 'flex';
+            };
+
+            document.getElementById('copyBgBtn').onclick = () => {
+                copyToClipboard(`background: ${backgroundGradients[selectedBg].gradient};`, 'bg');
+            };
+
+            document.getElementById('copyCardBtn').onclick = () => {
+                copyToClipboard(`background: ${cardGradients[selectedCard].gradient};`, 'card');
+            };
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                filterGradients();
+            });
+
+            themeTabs.forEach(tab => {
+                tab.onclick = () => {
+                    themeTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentTheme = tab.dataset.theme;
+                    filterGradients();
+                };
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById(btn.dataset.tab === 'separate' ? 'separateTab' : 'combinedTab').classList.add('active');
+                };
+            });
+
+            // Copy full HTML+CSS
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('copy-card-btn') || e.target.closest('.copy-card-btn')) {
+                    const btn = e.target.classList.contains('copy-card-btn') ? e.target : e.target.closest('.copy-card-btn');
+                    const index = parseInt(btn.dataset.index);
+                    const cards = [
+                        { title: 'Form Title', placeholder: 'Enter your text...', button: 'Submit', result: 'Your result will appear here' },
+                        { title: 'Registration Form', placeholder: 'Username', button: 'Register', result: 'Registration pending' },
+                        { title: 'Contact Form', placeholder: 'Your message...', button: 'Send', result: 'Message will be sent' }
+                    ];
+                    const card = cards[index];
+                    
+                    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${card.title}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: ${backgroundGradients[selectedBg].gradient};
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: ${cardGradients[selectedCard].gradient};
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            max-width: 400px;
+            width: 100%;
+        }
+        .card-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+        .card-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 16px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .card-input:focus { border-color: #3b82f6; }
+        .card-btn {
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+        .card-btn:hover { background: #2563eb; }
+        .card-result {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid rgba(0, 0, 0, 0.05);
+        }
+        .card-result h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        .card-result p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3 class="card-title">${card.title}</h3>
+        <input type="text" class="card-input" placeholder="${card.placeholder}">
+        <button class="card-btn">${card.button}</button>
+        <div class="card-result">
+            <h4>Result:</h4>
+            <p>${card.result}</p>
+        </div>
+    </div>
+</body>
+</html>`;
+                    
+                    navigator.clipboard.writeText(html).then(() => {
+                        const originalHTML = btn.innerHTML;
+                        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+                        setTimeout(() => {
+                            btn.innerHTML = originalHTML;
+                        }, 2000);
+                    });
+                }
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>

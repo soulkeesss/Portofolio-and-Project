@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19 Agustus 2025 Guess Number</title>
+</head>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    background-image: url(furina-genshin-3840x2160-13887.jpeg);
+    background-size: cover;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 95px;
+    border-radius: 25px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 8px 2px 0 rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    display: block;
+    color: white;
+    margin: 15px 0 5px;
+    font-weight: 500;
+}
+
+input {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    margin: 5px 0 10px;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+    background: rgb(0, 0, 0);
+    color: white;
+}
+
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #3800e0;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#result {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 600;
+    min-height: 40px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.298);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+
+#lone {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 600;
+    min-height: 40px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.298);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 600px) {
+    form {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+
+
+@keyframes pulse-glow {
+  0%,100%  {
+    text-shadow: 0 0 4px #0ff, 0 0 9px #0ff, 0 0 18px #0ff, 0 0 37px #0ff;
+  }
+  50% {
+    text-shadow: 0 0 2px #0ff, 0 0 4px #0ff, 0 0 8px #0ff, 0 0 18px #0ff;
+  }
+}
+
+@keyframes box-glow {
+  0%,100%  {
+    box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff;
+  }
+  50% {
+    box-shadow :0 0 2px #0ff, 0 0 4px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
+  }
+}
+
+@keyframes hoverbut-glow {
+  0%,100%  {
+    box-shadow: 0 0 5px #8a2de2, 0 0 10px #8a2de2, 0 0 20px #8a2de2, 0 0 40px #8a2de2;
+  }
+  50% {
+    box-shadow :0 0 2px #8a2de2, 0 0 4px #8a2de2, 0 0 8px #8a2de2, 0 0 12px #8a2de2;
+  }
+}
+
+button:hover {
+    background: #8a2de2;
+    transform: translateY(-1.7px);
+    animation: hoverbut-glow 2s infinite;
+    border: 10px;
+    padding: 3.7%;
+}
+
+
+h1 {
+    animation: pulse-glow 1s infinite;
+}
+
+.container{
+    animation: box-glow 2s infinite
+}
+
+label {
+    transition: 0.01s;
+}
+
+@keyframes w-glow {
+  0%,100%  {
+    box-shadow: 0 0 5px rgb(0, 255, 145), 0 0 10px rgb(0, 255, 145), 0 0 20px rgb(0, 255, 145), 0 0 40px rgb(0, 255, 145);
+  }
+  50% {
+    box-shadow :0 0 2px rgb(0, 255, 145), 0 0 4px rgb(0, 255, 145), 0 0 10px rgb(0, 255, 145), 0 0 20px rgb(0, 255, 145)f;
+  }
+}
+
+h2{
+    animation: w-glow 2s infinite;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+</style>
+<body>
+    <div class="container">
+    <h1 id="lol">Tebak Angka</h1>
+    <input type="number" id="don" required min="1" max="10" >
+    <button id="mysumbit" onclick="don()">Tebak </button>
+    <button id="restart" onclick="restart()">Play Again!</button>
+    <br>
+    <h3 id="result"></h2>
+    <h3 id="lone"></h2>
+    <h3 id="text2"></h2>
+    <h2 id="text3"></h3>
+    </div>
+
+    <script>
+
+let komp = Math.floor(Math.random()*10 )+ 1;
+let lives = 3;
+document.getElementById(`lone`).innerHTML = `Lives = ${lives}`;
+
+function don() {
+lives -=1;
+console.log(komp);
+
+let angka = parseFloat(document.getElementById(`don`).value);
+
+document.getElementById(`lone`).innerHTML = `Lives = ${lives}`;
+if  (angka < 1 || angka > 10 || angka == null) {
+    alert(`angka mu ${angka} tidak dalam rentang 1-10`);
+    alert(`tolong pilih 1-10 PINTAR `)
+}
+
+if (lives === 0 || lives < 0) {
+    document.getElementById(`lone`).innerHTML = `Anda kehabisan nyawa angkanya ${komp}`;
+    document.getElementById(`mysumbit`).disabled = true;
+
+}
+
+// console.log(`ini adalah angka yang kamu pilih ${angka}`)
+if (komp===angka) {
+    console.log(`duar`);
+    document.getElementById(`result`).innerHTML = `telah menebak angka, angkanya adalah ${komp}`;
+    document.getElementById(`mysumbit`).disabled = true;
+} 
+else if (angka < 1 || angka > 10 ) {
+    console.log(`PILIH YANG BENAR~!!`);
+    document.getElementById(`result`).innerHTML = `sendok makan tinggi`;
+
+}
+else if (komp > angka && lives ) {
+    console.log(`angka terlalu kecil`);
+    document.getElementById(`result`).innerHTML = `angka terlalu kecil `;
+}
+else if (komp < angka&& lives ) {
+    console.log(`angka terlalu besar`);
+    document.getElementById(`result`).innerHTML = `angka terlalu besar `;
+}
+else {
+    console.log(`ble`);
+}
+}
+
+function restart() {
+    lives = 3;
+    document.getElementById(`mysumbit`).disabled = false;
+    komp = Math.floor(Math.random()*10 )+ 1;
+    document.getElementById(`result`).innerHTML = ``;
+    document.getElementById(`lone`).innerHTML = `Lives : ${lives}`;
+    document.getElementById(`don`).innerHTML = ``
+}
+
+    </script>
+</body>
+</html>
