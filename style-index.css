@@ -220,7 +220,19 @@ nav {
   aspect-ratio:3/4; cursor:pointer;
   border:1px solid var(--border);
 }
-.card-img-ph { width:100%; height:100%; transition:transform .5s; object-fit: cover;}
+/* Hidden extra cards */
+.portfolio-card.hidden {
+  display:none;
+}
+/* Fade-in animation for revealed cards */
+.portfolio-card.fade-in {
+  animation: cardFadeIn 0.5s ease forwards;
+}
+@keyframes cardFadeIn {
+  from { opacity:0; transform:translateY(24px) scale(0.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+.card-img-ph { width:100%; height:100%; transition:transform .5s; }
 .portfolio-card:hover .card-img-ph { transform:scale(1.06); }
 .portfolio-card .card-overlay {
   position:absolute; bottom:0; left:0; right:0;
@@ -241,10 +253,12 @@ nav {
 .btn-show-more {
   padding:13px 36px; border-radius:50px; border:1.5px solid var(--border);
   font-size:.9rem; font-weight:500; display:inline-flex; align-items:center; gap:8px;
-  transition:border-color .25s, background .25s;
+  transition:border-color .25s, background .25s, opacity .3s;
+  cursor:pointer; background:transparent; color:var(--text);
+  font-family:'Inter',sans-serif;
 }
 .btn-show-more:hover { border-color:var(--text-muted); background:var(--bg-card); }
-
+.btn-show-more.hidden-btn { display:none;} 
 /**─── CONTACT ─── */
 .contact { padding:100px 48px; max-width:780px; margin:0 auto; }
 .contact-form { display:flex; flex-direction:column; gap:18px; }
