@@ -34,6 +34,37 @@ const observer  = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 revealEls.forEach(el => observer.observe(el));
 
+// ── SHOW MORE ──
+document.getElementById('showMoreBtn').addEventListener('click', function () {
+  const hiddenCards = document.querySelectorAll('.portfolio-card.hidden');
+
+  hiddenCards.forEach((card, i) => {
+    card.classList.remove('hidden');
+    // stagger the fade-in animation
+    card.style.animationDelay = (i * 60) + 'ms';
+    card.classList.add('fade-in');
+  });
+
+  // Hide the button once all cards are shown
+  this.classList.add('hidden-btn');
+  document.getElementById('showLessBtn').classList.remove('hidden-btn');
+});
+
+document.getElementById('showLessBtn').addEventListener('click', function () {
+  const showCard = document.querySelectorAll('.portfolio-card.fade-in');
+
+  showCard.forEach((card, i) => {
+    card.classList.remove('fade-in');
+    // stagger the fade-in animation
+    card.style.animationDelay = (i * 60) + 'ms';
+    card.classList.add('hidden');
+  });
+
+  // Hide the button once all cards are shown
+  this.classList.add('hidden-btn');
+  document.getElementById('showMoreBtn').classList.remove('hidden-btn');
+});
+
 // ── CAPTCHA TOGGLE ──
 document.getElementById('captchaCheck').addEventListener('click', function(){
   this.classList.toggle('checked');
