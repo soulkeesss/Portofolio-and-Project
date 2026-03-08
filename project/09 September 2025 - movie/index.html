@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9 September 2025</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+    <nav>
+        <h2 style="font-weight: bold;margin-left:30px;">Theater</h2>
+        <h2>Tv Show</h2>
+        <h2>Movies</h2>
+        <h2>Videos</h2>
+
+    </nav>
+
+    <div class="container">
+        <div class="contain one">
+            <img src="assets/default.jpeg" alt="" id="mainImg">
+            <div class="btn">
+                <button style="margin-right: 30px; margin-left: 40px;">Suka</button>
+                <button>Tidak Suka</button>
+            </div>
+        </div>
+        
+        <div class="contain two">
+            <h2 id="title" style="text-align: left;">Judul Film</h2>
+            <div class="btn">
+                <button>Tonton</button>
+                <button style="background-color: white; color: black;">Download</button>
+            </div>
+        
+        <p>Sinopsis</p>
+        <h3 id="sinopsis"></h3>
+        </div>
+        
+        <div class="contain three">
+            <p style="text-align: center;">Pilih Film</p>
+            <select name="" id="film">
+            <option value="">-- Pilih Film --</option>
+            <option value="film1">Spirited Away</option>
+            <option value="film2">Your Name</option>
+            <option value="film3">Princess Mononoke</option>
+            <option value="film4">Akira</option>
+            <option value="film5">Grave of the Fireflies</option>
+            <option value="film6">Ghost in the Shell</option>
+            <option value="film7">My Neighbor Totoro</option>
+            <option value="film8">A Silent Voice</option>
+            <option value="film9">Weathering With You</option>
+            <option value="film10">Castle in the Sky</option>
+            </select>
+            <p>Harga</p>
+            <h2 id="harga"></h2>
+            <p>Jumlah Tiket</p>
+            <input type="number" id="JTiket" min="0" placeholder="Masukkan Jumlah Tiket">
+            <p>Jumlah Bayar</p>
+            <h2><span id="bayar"></span></h2>
+            <button onclick="hitung()" id="btn">Bayar</button>
+        </div>
+    </div>
+
+    
+    <script src="script.js"></script>
+</body>
+</html>
