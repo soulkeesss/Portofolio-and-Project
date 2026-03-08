@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz JavaScript</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav><h1>Quiz JavaScript By Karsten Almaria Darmalim</h1></nav>
+    <div class="container">
+        <div class="quiz-section">
+              <div class="quiz-header">
+                <h2 class="quiz-title">Kuis Seputar JavaScript</h2>
+                <p>Terdiri Dari 15 Soal Seputar JavaScript!</p>
+            </div>
+            <div class="quiz-container" id="quiz-container"></div>
+            <div class="quiz-controls">
+                <button class="btn" id="prev-btn" disabled>Sebelumnya</button>
+                <button class="btn" id="next-btn">Selanjutnya</button>
+                <button class="btn" id="submit-btn" style="display: none;">Kirim Kuis</button>
+                <button class="btn" id="restart-btn" style="display: none;">Mulai Ulang</button>
+            </div>
+            <div class="quiz-result" id="quiz-result">
+                <h3 class="result-title">Hasil Kuis</h3>
+                <div class="result-score" id="result-score">0/0</div>
+                <div class="result-percent" id="result-percent">0/100</div>
+                <p class="result-message" id="result-message"></p>
+            </div>
+        </div>
+    </div>
+        
+
+    <script src="script.js"></script>
+</body>
+</html>

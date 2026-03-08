@@ -1,0 +1,164 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-image: url(anime-girl-dream-3840x2160-10024.jpg);
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: #ffffffaf;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    color: #2d3748;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    letter-spacing: -0.5px;
+}
+
+label {
+    color: #4a5568;
+    font-size: 1rem;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+input[type="number"] {
+    padding: 14px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f7fafc;
+    font-size: 1.1rem;
+    width: 100%;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-align: center;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: #667eea;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin: 0 10px;
+    cursor: pointer;
+    accent-color: #667eea;
+    vertical-align: middle;
+}
+
+button {
+    background: #667eea;
+    color: #ffffff;
+    border: none;
+    padding: 16px 40px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 25px 8px 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+button:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#generate {
+    background: #667eea;
+}
+
+#reset {
+    background: #ffffff;
+    color: #667eea;
+    border: 2px solid #667eea;
+    box-shadow: none;
+}
+
+#reset:hover {
+    background: #f7fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+.output {
+    background: #f7fafc;
+    padding: 24px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d3748;
+    text-align: center;
+    border: 2px solid #e2e8f0;
+    word-break: break-all;
+    letter-spacing: 1.5px;
+    font-family: 'Courier New', monospace;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 40px 30px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    button {
+        display: block;
+        width: 100%;
+        margin: 12px 0;
+    }
+    
+    label {
+        display: block;
+        margin: 20px 0 10px;
+    }
+    
+    input[type="checkbox"] {
+        margin: 10px auto;
+        display: block;
+    }
+    
+    .output {
+        font-size: 1rem;
+        padding: 20px;
+    }
+}
